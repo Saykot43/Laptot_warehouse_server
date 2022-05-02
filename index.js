@@ -44,22 +44,27 @@ async function run() {
         // Update a data
         // http://localhost:5000/update/626f8730a3a7e2edde32385f
 
-        app.put('/update/:id', async (req, res)=>{
+        app.put('/update/:id', async (req, res) => {
             const id = req.params.id;
             const data = req.body;
             const filter = { _id: ObjectId(id) };
             const options = { upsert: true };
             const updateDoc = {
                 $set: {
-                ...data,
+                    ...data,
                 },
-              };
-              const result = await productCollection.updateOne(filter, updateDoc, options);
-              res.send(result);
+            };
+            const result = await productCollection.updateOne(filter, updateDoc, options);
+            res.send(result);
         })
 
         // Delete a data
-app.
+        app.delete('/delete/:id', async(req, res)=>{
+            const id = req.params.id;
+            const filter = {_id: ObjectId(id)};
+            const result = await productCollection.deleteOne(filter);
+            res.send(result);
+        })
 
         console.log("Connected successfully to server");
     } finally {
