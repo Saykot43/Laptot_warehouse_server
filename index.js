@@ -41,6 +41,16 @@ async function run() {
             console.log('product added successfully');
         })
 
+        // find a data
+        // http://localhost:5000/product/626f7ff5a352beed38f46c8e
+
+        app.get('/product/:id', async(req, res)=>{
+            const id = req.params.id;
+            const filter = {_id: ObjectId(id)};
+            const result = await productCollection.findOne(filter);
+            res.send(result);
+        })
+
         // Update a data
         // http://localhost:5000/update/626f8730a3a7e2edde32385f
 
@@ -59,6 +69,8 @@ async function run() {
         })
 
         // Delete a data
+        // http://localhost:5000/delete/626fc22fce5fae07d57b3131
+        
         app.delete('/delete/:id', async(req, res)=>{
             const id = req.params.id;
             const filter = {_id: ObjectId(id)};
