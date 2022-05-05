@@ -22,7 +22,6 @@ async function run() {
         const productCollection = client.db("products").collection("product");
 
         // Read all data
-        // http://localhost:5000/produts
         app.get('/produts', async (req, res) => {
             const quary = req.query;
             const cursor = productCollection.find({});
@@ -31,7 +30,6 @@ async function run() {
         })
 
         // Create a data
-        // http://localhost:5000/productAdd
         app.post('/productAdd', async (req, res) => {
 
             const data = req.body;
@@ -42,7 +40,6 @@ async function run() {
         })
 
         // find a data
-        // http://localhost:5000/product/626f7ff5a352beed38f46c8e
 
         app.get('/product/:id', async(req, res)=>{
             const id = req.params.id;
@@ -52,7 +49,6 @@ async function run() {
         })
 
         // Update a data
-        // http://localhost:5000/update/626f8730a3a7e2edde32385f
 
         app.put('/update/:id', async (req, res) => {
             const id = req.params.id;
@@ -69,7 +65,6 @@ async function run() {
         })
 
         // Delete a data
-        // http://localhost:5000/delete/626fc22fce5fae07d57b3131
         
         app.delete('/delete/:id', async(req, res)=>{
             const id = req.params.id;
