@@ -19,6 +19,15 @@ async function run() {
         await client.connect();
 
         const productCollection = client.db("products").collection("product");
+        const itemCollection = client.db("products").collection("item");
+
+        // user login 
+        app.post('/login', async(req, res)=>{
+            const email= req.body;
+            console.log(email);
+            // const result = await productCollection.insertOne(data);
+            // res.send(email);
+        })
 
         // Read all data
         app.get('/produts', async (req, res) => {
@@ -37,6 +46,22 @@ async function run() {
             res.send(result);
             console.log('product added successfully');
         })
+
+        // item collections
+
+        app.get('/item', async(req, res) => {
+            const email = req.query.email;
+            const query = {email};
+            const cursor = itemCollection.find(query);
+            const items = await cursor.toArray();
+            res.send(items);
+          })
+    
+          app.post('/item', async(req, res) => {
+            const item = req.body;
+            const result = await itemCollection.insertOne(item);
+            res.send(result);
+          })
 
         // find a data
 
