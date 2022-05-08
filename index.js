@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
+var jwt = require('jsonwebtoken');
 require('dotenv').config()
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000
@@ -21,9 +22,18 @@ async function run() {
         const productCollection = client.db("products").collection("product");
         const itemCollection = client.db("products").collection("item");
 
+        // auth ////////////////////////////////
+        app.post('/login', async (req, res) => {
+            const user = req.body;
+            const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+                expiresIn: '1d'
+            });
+            res.send({ accessToken });
+        })
+
         // user login 
-        app.post('/login', async(req, res)=>{
-            const email= req.body;
+        app.post('/login', async (req, res) => {
+            const email = req.body;
             console.log(email);
             // const result = await productCollection.insertOne(data);
             // res.send(email);
@@ -49,25 +59,27 @@ async function run() {
 
         // item collections added
 
-        app.get('/item', async(req, res) => {
+        app.get('/item', async (req, res) => {
+            const authHeader = req.headers.authorization;
+            console.log(authHeader);
             const email = req.query.email;
-            const query = {email};
+            const query = { email };
             const cursor = itemCollection.find(query);
             const items = await cursor.toArray();
             res.send(items);
-          })
-    
-          app.post('/item', async(req, res) => {
+        })
+
+        app.post('/item', async (req, res) => {
             const item = req.body;
             const result = await itemCollection.insertOne(item);
             res.send(result);
-          })
+        })
 
         // find a data
 
-        app.get('/product/:id', async(req, res)=>{
+        app.get('/product/:id', async (req, res) => {
             const id = req.params.id;
-            const filter = {_id: ObjectId(id)};
+            const filter = { _id: ObjectId(id) };
             const result = await productCollection.findOne(filter);
             res.send(result);
         })
@@ -89,10 +101,10 @@ async function run() {
         })
 
         // Delete a data
-        
-        app.delete('/delete/:id', async(req, res)=>{
+
+        app.delete('/delete/:id', async (req, res) => {
             const id = req.params.id;
-            const filter = {_id: ObjectId(id)};
+            const filter = { _id: ObjectId(id) };
             const result = await productCollection.deleteOne(filter);
             res.send(result);
         })
