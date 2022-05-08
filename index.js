@@ -47,7 +47,7 @@ async function run() {
             console.log('product added successfully');
         })
 
-        // item collections
+        // item collections added
 
         app.get('/item', async(req, res) => {
             const email = req.query.email;
